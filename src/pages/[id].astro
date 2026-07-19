@@ -8,7 +8,7 @@ import StepHorizontal from "../components/StepHorizontal.astro";
 import StepTranslation from "../components/StepTranslation.astro";
 import StepSocial from "../components/StepSocial.astro";
 import StepStatusBar from "../components/StepStatusBar.astro";
-import "../styles/global.css";
+import BaseLayout from "../layouts/BaseLayout.astro";
 
 export async function getStaticPaths() {
   return [{ params: { id: "1" } }];
@@ -34,151 +34,141 @@ const components = [
 const total = components.length;
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200..900&family=Noto+Serif+TC:wght@200..900&display=swap" rel="stylesheet" />
-    <title>{data.name.zhHant}</title>
-  </head>
-  <body class="m-0 bg-dark-bg">
-    <h1 class="sr-only">{data.name.zhHant}</h1>
-    <div id="reader" class="flex flex-col h-dvh bg-dark-bg overflow-hidden relative" transition:name="reader" data-language="en">
-      <div class="flex-1 relative w-full overflow-hidden" id="stepContent" aria-live="polite">
-        {components.map((Step, i) => (
-          <div class="step absolute inset-0 flex items-center justify-center" class:list={{ "step-hidden": i !== 0 }}>
-            <Step data={data} />
-          </div>
-        ))}
-        <button id="zonePrev" type="button" class="absolute left-0 top-0 bottom-0 w-16 z-10 cursor-pointer focus-visible:ring-2 focus-visible:ring-gold focus-visible:outline-none"></button>
-        <button id="zoneNext" type="button" class="absolute right-0 top-0 bottom-0 w-16 z-10 cursor-pointer focus-visible:ring-2 focus-visible:ring-gold focus-visible:outline-none"></button>
-      </div>
-      <StepStatusBar labels={labels} current={0} />
+<BaseLayout title={data.name.zhHant}>
+  <h1 class="sr-only">{data.name.zhHant}</h1>
+  <div id="reader" class="flex flex-col h-dvh bg-dark-bg overflow-hidden relative" transition:name="reader" data-language="en">
+    <div class="flex-1 relative w-full overflow-hidden" id="stepContent" aria-live="polite">
+      {components.map((Step, i) => (
+        <div class="step absolute inset-0 flex items-center justify-center" class:list={{ "step-hidden": i !== 0 }}>
+          <Step data={data} />
+        </div>
+      ))}
+      <button id="zonePrev" type="button" class="absolute left-0 top-0 bottom-0 w-16 z-10 cursor-pointer focus-visible:ring-2 focus-visible:ring-gold focus-visible:outline-none"></button>
+      <button id="zoneNext" type="button" class="absolute right-0 top-0 bottom-0 w-16 z-10 cursor-pointer focus-visible:ring-2 focus-visible:ring-gold focus-visible:outline-none"></button>
     </div>
+    <StepStatusBar labels={labels} current={0} />
+  </div>
 
-    <script>
-      import i18n from "../i18n";
+  <script>
+    import i18n from "../i18n";
 
-      const reader = document.getElementById("reader")!;
-      const steps = reader.querySelectorAll<HTMLElement>(".step");
-      const btns = reader.querySelectorAll<HTMLElement>("#stepNav .step-btn");
-      const zonePrev = document.getElementById("zonePrev")!;
-      const zoneNext = document.getElementById("zoneNext")!;
-      const total = 6;
-      let current = 0;
+    const reader = document.getElementById("reader")!;
+    const steps = reader.querySelectorAll<HTMLElement>(".step");
+    const btns = reader.querySelectorAll<HTMLElement>("#stepNav .step-btn");
+    const zonePrev = document.getElementById("zonePrev")!;
+    const zoneNext = document.getElementById("zoneNext")!;
+    const total = 6;
+    let current = 0;
 
-      function switchLang(lang: string) {
-        reader.dataset.language = lang;
-        zonePrev.setAttribute("aria-label", i18n.t("nav.prev", { lng: lang }));
-        zoneNext.setAttribute("aria-label", i18n.t("nav.next", { lng: lang }));
-        const labels = i18n.t("stepLabels", { returnObjects: true, lng: lang }) as string[];
-        btns.forEach((btn, i) => btn.setAttribute("aria-label", labels[i]));
-        document.querySelectorAll(".langSwitch button").forEach((btn) => {
-          btn.setAttribute("aria-pressed", String(btn.dataset.switchLang === lang));
-        });
-      }
-
-      function detectBrowserLang(): string {
-        const params = new URLSearchParams(location.search);
-        const forced = params.get("lang");
-        if (forced === "zh-Hant" || forced === "zh-Hans") return forced;
-        const navLang = navigator.language;
-        if (navLang.startsWith("zh")) {
-          return navLang.startsWith("zh-CN") || navLang.startsWith("zh-SG") || navLang.startsWith("zh-MY") ? "zh-Hans" : "zh-Hant";
-        }
-        return "en";
-      }
-
-      switchLang(detectBrowserLang());
-
-      document.querySelectorAll(".langSwitch button").forEach((btn) => {
-        btn.addEventListener("click", () => switchLang(btn.dataset.switchLang!));
+    function switchLang(lang: string) {
+      reader.dataset.language = lang;
+      zonePrev.setAttribute("aria-label", i18n.t("nav.prev", { lng: lang }));
+      zoneNext.setAttribute("aria-label", i18n.t("nav.next", { lng: lang }));
+      const labels = i18n.t("stepLabels", { returnObjects: true, lng: lang }) as string[];
+      btns.forEach((btn, i) => btn.setAttribute("aria-label", labels[i]));
+      document.querySelectorAll<HTMLElement>(".langSwitch button").forEach((btn) => {
+        btn.setAttribute("aria-pressed", String(btn.dataset.switchLang === lang));
       });
+    }
 
-      function showStep(n: number) {
-        if (n === current || n < 0 || n >= total) return;
-        document.startViewTransition(() => {
-          steps[current].classList.add("step-hidden");
-          steps[n].classList.remove("step-hidden");
-          current = n;
-        });
-        btns.forEach((el, i) => {
-          const dot = el.querySelector("span")!;
-          dot.classList.toggle("bg-gold", i === n);
-          dot.classList.toggle("bg-brown/50", i !== n);
-        });
-        document.querySelectorAll("#stepLabel > [data-step]").forEach((el) => {
-          el.classList.toggle("hidden", Number(el.dataset.step) !== n);
-        });
+    function detectBrowserLang(): string {
+      const params = new URLSearchParams(location.search);
+      const forced = params.get("lang");
+      if (forced === "zh-Hant" || forced === "zh-Hans") return forced;
+      const navLang = navigator.language;
+      if (navLang.startsWith("zh")) {
+        return navLang.startsWith("zh-CN") || navLang.startsWith("zh-SG") || navLang.startsWith("zh-MY") ? "zh-Hans" : "zh-Hant";
       }
+      return "en";
+    }
 
-      btns.forEach((btn) => btn.addEventListener("click", () => showStep(Number(btn.dataset.step))));
-      zonePrev.addEventListener("click", () => showStep(current - 1));
-      zoneNext.addEventListener("click", () => showStep(current + 1));
+    switchLang(detectBrowserLang());
 
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "ArrowLeft") showStep(current - 1);
-        if (e.key === "ArrowRight") showStep(current + 1);
+    document.querySelectorAll<HTMLElement>(".langSwitch button").forEach((btn) => {
+      btn.addEventListener("click", () => switchLang(btn.dataset.switchLang!));
+    });
+
+    function showStep(n: number) {
+      if (n === current || n < 0 || n >= total) return;
+      document.startViewTransition(() => {
+        steps[current].classList.add("step-hidden");
+        steps[n].classList.remove("step-hidden");
+        current = n;
       });
-
-      let tx = 0, ty = 0;
-      reader.addEventListener("touchstart", (e) => { tx = e.touches[0].clientX; ty = e.touches[0].clientY; });
-      reader.addEventListener("touchend", (e) => {
-        const dx = e.changedTouches[0].clientX - tx;
-        const dy = e.changedTouches[0].clientY - ty;
-        if (Math.abs(dy) > 30 || Math.abs(dx) < 40) return;
-        if (dx > 0) showStep(current - 1);
-        else showStep(current + 1);
+      btns.forEach((el, i) => {
+        const dot = el.querySelector("span")!;
+        dot.classList.toggle("bg-gold", i === n);
+        dot.classList.toggle("bg-brown/50", i !== n);
       });
-
-      let wheelBusy = false;
-      let wheelReady = false;
-      reader.addEventListener("wheel", (e) => {
-        if (wheelBusy || Math.abs(e.deltaY) < 80) return;
-        const el = steps[current].firstElementChild;
-        const scrollable = el && el.scrollHeight > el.clientHeight;
-        const atEdge = !scrollable || (
-          (e.deltaY > 0 && el.scrollTop >= el.scrollHeight - el.clientHeight - 30) ||
-          (e.deltaY < 0 && el.scrollTop <= 30)
-        );
-        if (!atEdge) { wheelReady = false; return; }
-        if (wheelReady) {
-          wheelReady = false;
-          wheelBusy = true;
-          setTimeout(() => { wheelBusy = false; }, 800);
-          if (e.deltaY > 0) showStep(current + 1);
-          else showStep(current - 1);
-        } else {
-          wheelReady = true;
-        }
+      document.querySelectorAll<HTMLElement>("#stepLabel > [data-step]").forEach((el) => {
+        el.classList.toggle("hidden", Number(el.dataset.step) !== n);
       });
+    }
 
-      function showHint() {
-        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-        document.getElementById("hintR")?.remove();
-        const el = document.createElement("div");
-        el.id = "hintR";
-        el.className = "fixed right-0 top-1/2 -translate-y-1/2 w-3 h-24 pointer-events-none z-20";
-        el.style.background = "linear-gradient(to left, rgba(200,169,110,0.5), transparent)";
-        el.style.borderRadius = "0 4px 4px 0";
-        el.style.opacity = "0";
-        reader.appendChild(el);
-        const breathe = (to: number, ms: number) => new Promise((r) => {
-          el.style.transition = `opacity ${ms}ms ease-in-out`;
-          el.style.opacity = String(to);
-          setTimeout(r, ms);
-        });
-        setTimeout(async () => {
-          await breathe(0.35, 600);
-          for (let i = 0; i < 3; i++) { await breathe(0.08, 900); await breathe(0.35, 900); }
-          await breathe(0, 400);
-          el.remove();
-        }, 800);
+    btns.forEach((btn) => btn.addEventListener("click", () => showStep(Number(btn.dataset.step))));
+    zonePrev.addEventListener("click", () => showStep(current - 1));
+    zoneNext.addEventListener("click", () => showStep(current + 1));
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") showStep(current - 1);
+      if (e.key === "ArrowRight") showStep(current + 1);
+    });
+
+    let tx = 0, ty = 0;
+    reader.addEventListener("touchstart", (e) => { tx = e.touches[0].clientX; ty = e.touches[0].clientY; });
+    reader.addEventListener("touchend", (e) => {
+      const dx = e.changedTouches[0].clientX - tx;
+      const dy = e.changedTouches[0].clientY - ty;
+      if (Math.abs(dy) > 30 || Math.abs(dx) < 40) return;
+      if (dx > 0) showStep(current - 1);
+      else showStep(current + 1);
+    });
+
+    let wheelBusy = false;
+    let wheelReady = false;
+    reader.addEventListener("wheel", (e) => {
+      if (wheelBusy || Math.abs(e.deltaY) < 80) return;
+      const el = steps[current].firstElementChild;
+      const scrollable = el && el.scrollHeight > el.clientHeight;
+      const atEdge = !scrollable || (
+        (e.deltaY > 0 && el.scrollTop >= el.scrollHeight - el.clientHeight - 30) ||
+        (e.deltaY < 0 && el.scrollTop <= 30)
+      );
+      if (!atEdge) { wheelReady = false; return; }
+      if (wheelReady) {
+        wheelReady = false;
+        wheelBusy = true;
+        setTimeout(() => { wheelBusy = false; }, 800);
+        if (e.deltaY > 0) showStep(current + 1);
+        else showStep(current - 1);
+      } else {
+        wheelReady = true;
       }
+    });
 
-      if (current === 0) showHint();
-    </script>
-  </body>
-</html>
+    function showHint() {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      document.getElementById("hintR")?.remove();
+      const el = document.createElement("div");
+      el.id = "hintR";
+      el.className = "fixed right-0 top-1/2 -translate-y-1/2 w-3 h-24 pointer-events-none z-20";
+      el.style.background = "linear-gradient(to left, rgba(200,169,110,0.5), transparent)";
+      el.style.borderRadius = "0 4px 4px 0";
+      el.style.opacity = "0";
+      reader.appendChild(el);
+      const breathe = (to: number, ms: number) => new Promise((r) => {
+        el.style.transition = `opacity ${ms}ms ease-in-out`;
+        el.style.opacity = String(to);
+        setTimeout(r, ms);
+      });
+      setTimeout(async () => {
+        await breathe(0.35, 600);
+        for (let i = 0; i < 3; i++) { await breathe(0.08, 900); await breathe(0.35, 900); }
+        await breathe(0, 400);
+        el.remove();
+      }, 800);
+    }
+
+    if (current === 0) showHint();
+  </script>
+</BaseLayout>

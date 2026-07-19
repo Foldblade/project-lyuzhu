@@ -1,0 +1,31 @@
+---
+import "../styles/global.css";
+
+export interface Props {
+  title: string;
+  fonts?: boolean;
+  bodyClass?: string;
+}
+
+const { title, fonts = true, bodyClass = "" } = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{title}</title>
+    {fonts && (
+      <>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200..900&family=Noto+Serif+TC:wght@200..900&display=swap" rel="stylesheet" />
+      </>
+    )}
+    <slot name="head" />
+    <script>(function(){var a=document.createElement("script");a.defer=!0;a.src="/t/c.js";a.setAttribute("data-website-id","3f75a049-51c9-48b2-98af-d3e981353a09");a.setAttribute("data-host-u"+"rl","/t");document.head.appendChild(a)})();</script>
+  </head>
+  <body class={"m-0 bg-dark-bg" + (bodyClass ? " " + bodyClass : "")}>
+    <slot />
+  </body>
+</html>
