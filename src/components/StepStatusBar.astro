@@ -1,0 +1,45 @@
+---
+import DataLang from "./DataLang.astro";
+
+export interface Props {
+  labels: Record<string, string[]>;
+  current: number;
+}
+
+const { labels, current } = Astro.props;
+const { en, "zh-Hant": hant, "zh-Hans": hans } = labels;
+const sr = { "zh-Hant": hant[current], "zh-Hans": hans[current], en: en[current] };
+---
+
+<nav class="flex items-center px-4 py-3" id="stepNav" aria-label="step">
+  <div id="stepLabel" class="flex items-center w-24">
+    {
+      en.map((_, i) => (
+        <span class:list={{ "hidden": i !== current }} data-step={i}>
+          <DataLang each={{ "zh-Hant": hant[i], "zh-Hans": hans[i], en: en[i] }} as="span" class="text-gold text-body-sm whitespace-nowrap" />
+        </span>
+      ))
+    }
+  </div>
+  <div class="flex-1 flex items-center justify-center gap-2">
+    {
+      en.map((_, i) => (
+        <button
+          data-step={i}
+          class="step-btn focus-visible:ring-2 focus-visible:ring-gold focus-visible:outline-none rounded-full transition-colors"
+          aria-label={en[i]}
+        >
+          <span
+            class={`inline-block w-2 h-2 rounded-full ${i === current ? "bg-gold" : "bg-brown/50"}`}
+          />
+        </button>
+      ))
+    }
+  </div>
+  <div class="langSwitch flex justify-end gap-2 text-xs text-brown w-24">
+    <button type="button" data-switch-lang="en" aria-pressed="true" class="hover:text-gold transition-colors">EN</button>
+    <button type="button" data-switch-lang="zh-Hant" aria-pressed="false" class="hover:text-gold transition-colors">正體</button>
+    <button type="button" data-switch-lang="zh-Hans" aria-pressed="false" class="hover:text-gold transition-colors">简体</button>
+  </div>
+  <DataLang each={sr} as="span" class="sr-only" />
+</nav>

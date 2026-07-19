@@ -1,0 +1,36 @@
+---
+import StepLayout from "./StepLayout.astro";
+import type { BambooData } from "../data/types";
+
+export interface Props {
+  data: BambooData;
+}
+
+const { data } = Astro.props;
+---
+
+<StepLayout noPadding>
+  <div class="h-full" style="aspect-ratio:456/2405;min-height:600px;margin-top:auto;margin-bottom:auto">
+    <div class="flex flex-row-reverse w-full h-full">
+      {
+        data.layout.map((col) => (
+          <div class="flex-1 flex flex-col h-full">
+            {col.glyphIds.map((id) => (
+              <div
+                class="flex items-center justify-center overflow-hidden"
+                style={`flex:${data.glyphPool[id].height}`}
+              >
+                <img
+                  src={`/assets/1/${data.glyphPool[id].charArt}.svg`}
+                  alt={data.glyphPool[id].glyph}
+                  class="glyph-img w-full h-full object-contain block"
+                  transition:name={data.glyphPool[id].id}
+                />
+              </div>
+            ))}
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</StepLayout>

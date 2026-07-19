@@ -1,0 +1,38 @@
+---
+import StepLayout from './StepLayout.astro'
+import type { BambooData } from '../data/types'
+
+export interface Props { data: BambooData }
+
+const { data } = Astro.props
+const cols = data.layout.flatMap(col => ['bronze', 'modern'].map(kind => ({ kind, col })))
+---
+
+<StepLayout noPadding>
+  <div class="h-full" style="aspect-ratio:912/2405;min-height:600px;margin-top:auto;margin-bottom:auto">
+    <div class="flex flex-row-reverse w-full h-full">
+      {cols.map(({ kind, col }) => (
+        kind === 'bronze' ? (
+          <div class="flex flex-col h-full" style="flex:1">
+            {col.glyphIds.map(id => (
+              <div class="flex items-center justify-center overflow-hidden" style={`flex:${data.glyphPool[id].height}`}>
+                <img src={`/assets/1/${data.glyphPool[id].charArt}.svg`} alt={data.glyphPool[id].glyph} class="glyph-img w-full h-full object-contain block" transition:name={data.glyphPool[id].id} />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div class="flex flex-col h-full bg-brown/30" style="flex:1">
+            {col.glyphIds.map(id => {
+              const g = data.glyphPool[id]
+              return (
+              <div class="flex flex-col items-center justify-center text-warm" style={`flex:${data.glyphPool[id].height}`}>
+                <span class="text-body leading-tight" transition:name={`m-${g.id}`}>{g.glyph}</span>
+              </div>
+              )
+            })}
+          </div>
+        )
+      ))}
+    </div>
+  </div>
+</StepLayout>

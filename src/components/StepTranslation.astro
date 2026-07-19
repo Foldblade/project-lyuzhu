@@ -1,0 +1,213 @@
+---
+import type { StreamItem, Annotation } from "../data/types";
+import StepLayout from "./StepLayout.astro";
+import type { BambooData } from "../data/types";
+import Trans from "./Trans.astro";
+import DataLang from "./DataLang.astro";
+
+export interface Props {
+  data: BambooData;
+}
+
+const { data } = Astro.props;
+
+const delimiterChar = (kind: string) => (kind === "comma" ? "、" : "。");
+const punctName = (slice: StreamItem[], idx: number) => {
+  const prev = slice[idx - 1];
+  return prev?.type === "glyph" ? `p-${prev.glyphId}` : undefined;
+};
+function charSrc(glyphId: string) {
+  return `/assets/1/${data.glyphPool[glyphId].charArt}.svg`;
+}
+
+function sentenceAnnotations(
+  streamSlice: StreamItem[],
+  annList: Annotation[],
+): Annotation[] {
+  const glyphIds = new Set(
+    streamSlice
+      .filter(
+        (i): i is { type: "glyph"; glyphId: string } => i.type === "glyph",
+      )
+      .map((i) => i.glyphId),
+  );
+  return annList.filter((ann) => ann.glyphIds.some((id) => glyphIds.has(id)));
+}
+
+function supMap(annList: Annotation[]): Record<string, number> {
+  const m: Record<string, number> = {};
+  annList.forEach((ann, i) => {
+    m[ann.glyphIds[ann.glyphIds.length - 1]] = i + 1;
+  });
+  return m;
+}
+
+const sectionLabels: Record<
+  string,
+  { "zh-Hant": string; "zh-Hans": string; en: string }
+> = {
+  translation: { "zh-Hant": "譯文", "zh-Hans": "译文", en: "Translation" },
+  annotations: { "zh-Hant": "注釋", "zh-Hans": "注释", en: "Annotations" },
+};
+
+const langs = ["zh-Hant", "zh-Hans", "en"] as const;
+---
+
+<StepLayout maxWidth="600px">
+  <div class="my-auto w-full container flex flex-col gap-8">
+    {
+      data.sentences.map((s) => {
+        const hantAnn = sentenceAnnotations(
+          s.streamSlice,
+          data.annotations.zhHant,
+        );
+        const hansAnn = sentenceAnnotations(
+          s.streamSlice,
+          data.annotations.zhHans,
+        );
+        const enAnn = sentenceAnnotations(s.streamSlice, data.annotations.en);
+
+        return (
+          <div class="border-l-2 border-brown pl-4 w-full">
+            <div class="flex flex-col gap-3">
+              {langs.map((lang) => (
+                <div class="flex flex-wrap gap-0.5" data-lang={lang}>
+                  {(() => {
+                    const ann =
+                      lang === "zh-Hant"
+                        ? hantAnn
+                        : lang === "zh-Hans"
+                          ? hansAnn
+                          : enAnn;
+                    const sup = supMap(ann);
+                    return s.streamSlice.map((i, idx) =>
+                      i.type === "delimiter" ? (
+                        <div
+                          class="flex flex-col items-center"
+                          style="width:18px"
+                        >
+                          <div style="height:36px" />
+                          <span
+                            class="text-red text-body leading-tight"
+                            transition:name={punctName(s.streamSlice, idx)}
+                          >
+                            {delimiterChar(i.kind)}
+                          </span>
+                        </div>
+                      ) : (
+                        <div
+                          class="flex flex-col items-center"
+                          style="width:24px"
+                        >
+                          <div
+                            class="flex items-center justify-center"
+                            style="height:36px;width:24px"
+                          >
+                            <img
+                              src={charSrc(i.glyphId)}
+                              alt={data.glyphPool[i.glyphId].glyph}
+                              class="glyph-img max-w-full max-h-full object-contain"
+                              transition:name={data.glyphPool[i.glyphId].id}
+                            />
+                          </div>
+                          <div style="position:relative;display:inline-block">
+                            <span
+                              class="text-gold text-center text-body leading-tight font-normal"
+                              transition:name={`m-${data.glyphPool[i.glyphId].id}`}
+                            >
+                              {data.glyphPool[i.glyphId].glyph}
+                            </span>
+                            {sup[i.glyphId] && (
+                              <sup style="position:absolute;top:-0.15em;right:-0.5em;font-size:0.65em;line-height:1;color:var(--color-gold)">
+                                {sup[i.glyphId]}
+                              </sup>
+                            )}
+                          </div>
+                          {data.glyphPool[i.glyphId].modernChar && (
+                            <span
+                              class="text-gold text-center text-caption leading-tight opacity-70"
+                              transition:name={`c-${data.glyphPool[i.glyphId].id}`}
+                            >
+                              [{data.glyphPool[i.glyphId].modernChar}]
+                            </span>
+                          )}
+                        </div>
+                      ),
+                    );
+                  })()}
+                </div>
+              ))}
+
+              <DataLang
+                each={sectionLabels.translation}
+                as="h3"
+                class="text-gold text-subheading font-normal tracking-label"
+              />
+              <DataLang
+                each={s.translation}
+                as="div"
+                class="text-warm text-body-sm leading-relaxed"
+                html
+              />
+
+              <DataLang
+                each={sectionLabels.annotations}
+                as="h3"
+                class="text-gold text-subheading font-normal tracking-label"
+              />
+
+              {langs.map((lang) => {
+                const ann =
+                  lang === "zh-Hant"
+                    ? hantAnn
+                    : lang === "zh-Hans"
+                      ? hansAnn
+                      : enAnn;
+                return (
+                  <ol
+                    class="space-y-2 text-body-sm leading-relaxed list-none p-0 m-0"
+                    data-lang={lang}
+                  >
+                    {ann.map((a, i) => (
+                      <li class="flex gap-2">
+                        <span class="text-gold shrink-0">{i + 1}.</span>
+                        <div>
+                          <span class="text-gold">{a.lemma}</span>
+                          <span class="text-muted annotation-body" set:html={" " + a.body} />
+                        </div>
+                      </li>
+                    ))}
+                  </ol>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })
+    }
+
+    <hr class="border-brown" />
+
+    <div class="w-full">
+      <Trans
+        key="afterword.title"
+        as="h2"
+        class="text-gold text-heading font-normal tracking-label mb-4"
+      />
+      <Trans
+        key="afterword.body"
+        as="p"
+        class="text-warm text-body-sm leading-relaxed"
+        html
+      />
+    </div>
+  </div>
+</StepLayout>
+
+<style is:global>
+  .annotation-body br {
+    display: block;
+    content: "";
+    margin-block: 0.5em;
+  }
+</style>

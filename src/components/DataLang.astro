@@ -1,0 +1,24 @@
+---
+type LangRecord = { "zh-Hant": string; "zh-Hans": string; en: string };
+type Tag = "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" | "span" | "div" | "label";
+
+export interface Props {
+  each: LangRecord;
+  as?: Tag;
+  class?: string;
+  html?: boolean;
+}
+
+const { each, as: Tag = "span", class: className, html } = Astro.props;
+const langs = ["zh-Hant", "zh-Hans", "en"] as const;
+const norm = langs.reduce((m, l) => {
+  m[l] = each[l] ?? each[l.replace("-", "")] ?? "";
+  return m;
+}, {} as Record<string, string>);
+const langAttr = (l: string) => l === "en" ? {} : { lang: l };
+---
+
+{langs.map(lang => html
+  ? <Tag class={className} {...langAttr(lang)} data-lang={lang} set:html={norm[lang]} />
+  : <Tag class={className} {...langAttr(lang)} data-lang={lang}>{norm[lang]}</Tag>
+)}

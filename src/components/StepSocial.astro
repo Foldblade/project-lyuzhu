@@ -1,0 +1,39 @@
+---
+import StepLayout from "./StepLayout.astro";
+import Trans from "./Trans.astro";
+---
+
+<StepLayout maxWidth="600px">
+  <div class="my-auto w-full flex flex-col gap-6">
+    <Trans
+      key="socialInfo.title"
+      as="h2"
+      class="text-gold text-heading font-normal tracking-label"
+    />
+
+    <Trans
+      key="socialInfo.body"
+      as="p"
+      class="text-warm text-sm leading-relaxed text-center"
+      html
+    />
+
+    <div class="flex flex-col gap-3 w-full">
+      <button
+        type="button"
+        aria-disabled="true"
+        disabled
+        class="flex items-center justify-center gap-2 border border-brown rounded px-4 py-2 text-warm text-sm transition-colors hover:border-gold hover:text-gold"
+      >
+        Fetlife
+      </button>
+    </div>
+
+    <Trans
+      key="socialInfo.footer"
+      as="p"
+      class="text-muted text-xs leading-relaxed text-center"
+      html
+    />
+  </div>
+</StepLayout>

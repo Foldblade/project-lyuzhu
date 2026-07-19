@@ -1,0 +1,21 @@
+---
+import i18n from "../i18n";
+
+type Tag = "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" | "span" | "div" | "label";
+
+export interface Props {
+  key: string;
+  as?: Tag;
+  class?: string;
+  html?: boolean;
+}
+
+const { key, as: Tag = "span", class: className, html } = Astro.props;
+const langAttr = (l: string) => l === "en" ? {} : { lang: l };
+const langs = ["zh-Hant", "zh-Hans", "en"];
+---
+
+{langs.map(lang => html
+  ? <Tag class={className} {...langAttr(lang)} data-lang={lang} set:html={i18n.t(key, { lng: lang })} />
+  : <Tag class={className} {...langAttr(lang)} data-lang={lang}>{i18n.t(key, { lng: lang })}</Tag>
+)}
