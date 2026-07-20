@@ -6,8 +6,8 @@ export interface Props {
 const { animEndMs } = Astro.props;
 ---
 
-<div id="step0-overlay" class="absolute inset-0 z-40 opacity-0 transition-opacity duration-700 ease-in-out glass-container" aria-hidden="true" data-anim-end={animEndMs}>
-  <div class="absolute inset-0 glass-bg"></div>
+<div id="step0-overlay" class="absolute inset-0 z-40 opacity-0 transition-opacity duration-700 ease-in-out glass-container" aria-hidden="true" data-anim-end={animEndMs} style="-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)">
+  <div class="absolute inset-0" style="background:rgba(26,26,26,0.4)"></div>
 
   <div class="absolute left-4 top-1/2 -translate-y-1/2 flex flex-col items-center gap-2 pointer-events-none">
     <svg class="w-8 h-8 text-gold" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
@@ -41,14 +41,3 @@ const { animEndMs } = Astro.props;
     <svg class="w-4 h-4 text-muted" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>
   </div>
 </div>
-
-<style is:global>
-  .glass-container {
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-  }
-
-  .glass-bg {
-    background: rgba(26, 26, 26, 0.4);
-  }
-</style>
