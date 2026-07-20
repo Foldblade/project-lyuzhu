@@ -1,24 +1,31 @@
 ---
 import StepLayout from "./StepLayout.astro";
 import type { BambooData } from "../data/types";
+import { ANIM_ROW_STAGGER, ANIM_DURATION } from "../data/anim-constants";
 
 export interface Props {
   data: BambooData;
 }
 
 const { data } = Astro.props;
+
+const gapBetweenCols = 0;
+const maxRows = Math.max(...data.layout.map(c => c.glyphIds.length));
+const colDuration = maxRows * ANIM_ROW_STAGGER + ANIM_DURATION + gapBetweenCols;
 ---
 
 <StepLayout noPadding>
-  <div class="h-full" style="aspect-ratio:456/2405;min-height:600px;margin-top:auto;margin-bottom:auto">
+  <div class="h-full" style={`aspect-ratio:456/2405;min-height:600px;margin-top:auto;margin-bottom:auto;--anim-duration:${ANIM_DURATION}s;--anim-stagger:${ANIM_ROW_STAGGER}s`}>
     <div class="flex flex-row-reverse w-full h-full">
       {
-        data.layout.map((col) => (
+        data.layout.map((col, colIdx) => {
+          const colDelay = colIdx * colDuration;
+          return (
           <div class="flex-1 flex flex-col h-full">
-            {col.glyphIds.map((id) => (
+            {col.glyphIds.map((id, rowIdx) => (
               <div
-                class="flex items-center justify-center overflow-hidden"
-                style={`flex:${data.glyphPool[id].height}`}
+                class="flex items-center justify-center overflow-hidden fade-in-cell"
+                style={`flex:${data.glyphPool[id].height};--col-delay:${colDelay}s;--row-idx:${rowIdx}`}
               >
                 <img
                   src={`/assets/1/${data.glyphPool[id].charArt}.svg`}
@@ -29,8 +36,34 @@ const { data } = Astro.props;
               </div>
             ))}
           </div>
-        ))
+          )
+        })
       }
     </div>
   </div>
 </StepLayout>
+
+<style>
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .fade-in-cell {
+    opacity: 1;
+  }
+</style>
+
+<style is:global>
+  #stepContent:not([data-step0-animated]) .fade-in-cell {
+    opacity: 0;
+    animation: fade-in var(--anim-duration, 0.4s) ease-out forwards;
+    animation-delay: calc(var(--col-delay) + var(--row-idx) * var(--anim-stagger, 0.04s));
+  }
+</style>

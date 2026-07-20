@@ -8,7 +8,9 @@ import StepHorizontal from "../components/StepHorizontal.astro";
 import StepTranslation from "../components/StepTranslation.astro";
 import StepSocial from "../components/StepSocial.astro";
 import StepStatusBar from "../components/StepStatusBar.astro";
+import Step0Overlay from "../components/Step0Overlay.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { ANIM_ROW_STAGGER, ANIM_DURATION } from "../data/anim-constants";
 
 export async function getStaticPaths() {
   return [{ params: { id: "1" } }];
@@ -32,6 +34,13 @@ const components = [
   StepSocial,
 ];
 const total = components.length;
+
+// Animation timing — matches ANIM_ROW_STAGGER / ANIM_DURATION from anim-constants
+const maxRows = 15;
+const colDuration = maxRows * ANIM_ROW_STAGGER + ANIM_DURATION;
+const lastColStart = (data.layout.length - 1) * colDuration;
+const lastRowStart = lastColStart + (maxRows - 1) * ANIM_ROW_STAGGER;
+const totalAnimMs = Math.ceil((lastRowStart + ANIM_DURATION) * 1000) + 300;
 ---
 
 <BaseLayout title={data.name.zhHant}>
@@ -43,8 +52,10 @@ const total = components.length;
           <Step data={data} />
         </div>
       ))}
-      <button id="zonePrev" type="button" class="absolute left-0 top-0 bottom-0 w-16 z-10 cursor-pointer focus-visible:ring-2 focus-visible:ring-gold focus-visible:outline-none"></button>
-      <button id="zoneNext" type="button" class="absolute right-0 top-0 bottom-0 w-16 z-10 cursor-pointer focus-visible:ring-2 focus-visible:ring-gold focus-visible:outline-none"></button>
+      <button id="zonePrev" type="button" class="absolute left-0 top-0 bottom-0 w-[max(64px,8vw)] z-10 cursor-pointer focus-visible:ring-2 focus-visible:ring-gold focus-visible:outline-none"></button>
+      <button id="zoneNext" type="button" class="absolute right-0 top-0 bottom-0 w-[max(64px,8vw)] z-10 cursor-pointer focus-visible:ring-2 focus-visible:ring-gold focus-visible:outline-none"></button>
+
+      <Step0Overlay animEndMs={totalAnimMs} />
     </div>
     <StepStatusBar labels={labels} current={0} />
   </div>
@@ -54,6 +65,7 @@ const total = components.length;
 
     const reader = document.getElementById("reader")!;
     const steps = reader.querySelectorAll<HTMLElement>(".step");
+    const stepContent = document.getElementById("stepContent")!;
     const btns = reader.querySelectorAll<HTMLElement>("#stepNav .step-btn");
     const zonePrev = document.getElementById("zonePrev")!;
     const zoneNext = document.getElementById("zoneNext")!;
@@ -69,6 +81,7 @@ const total = components.length;
       document.querySelectorAll<HTMLElement>(".langSwitch button").forEach((btn) => {
         btn.setAttribute("aria-pressed", String(btn.dataset.switchLang === lang));
       });
+      updateStep0Overlay(lang);
     }
 
     function detectBrowserLang(): string {
@@ -82,6 +95,24 @@ const total = components.length;
       return "en";
     }
 
+    const oHintKeys: Record<string, string[]> = {
+      prev: ["oHintPrev", "step0Hint.prev"],
+      next: ["oHintNext", "step0Hint.next"],
+      scroll: ["oHintScroll", "step0Hint.scroll"],
+      keys: ["oHintKeys", "step0Hint.keys"],
+      close: ["oHintClose", "step0Hint.close"],
+      lang: ["oHintLang", "step0Hint.lang"],
+    };
+
+    function updateStep0Overlay(lang: string) {
+      for (const [, [id, key]] of Object.entries(oHintKeys)) {
+        const el = document.getElementById(id);
+        if (el) el.textContent = i18n.t(key, { lng: lang });
+      }
+      const closeBtn = document.getElementById("overlayClose");
+      if (closeBtn) closeBtn.setAttribute("aria-label", i18n.t("step0Hint.close", { lng: lang }));
+    }
+
     switchLang(detectBrowserLang());
 
     document.querySelectorAll<HTMLElement>(".langSwitch button").forEach((btn) => {
@@ -89,6 +120,7 @@ const total = components.length;
     });
 
     function showStep(n: number) {
+      hideStep0Overlay();
       if (n === current || n < 0 || n >= total) return;
       document.startViewTransition(() => {
         steps[current].classList.add("step-hidden");
@@ -114,16 +146,6 @@ const total = components.length;
       if (e.key === "ArrowRight") showStep(current + 1);
     });
 
-    let tx = 0, ty = 0;
-    reader.addEventListener("touchstart", (e) => { tx = e.touches[0].clientX; ty = e.touches[0].clientY; });
-    reader.addEventListener("touchend", (e) => {
-      const dx = e.changedTouches[0].clientX - tx;
-      const dy = e.changedTouches[0].clientY - ty;
-      if (Math.abs(dy) > 30 || Math.abs(dx) < 40) return;
-      if (dx > 0) showStep(current - 1);
-      else showStep(current + 1);
-    });
-
     let wheelBusy = false;
     let wheelReady = false;
     reader.addEventListener("wheel", (e) => {
@@ -146,29 +168,36 @@ const total = components.length;
       }
     });
 
-    function showHint() {
+    let overlayTimer: ReturnType<typeof setTimeout>;
+    const step0Overlay = document.getElementById("step0-overlay")!;
+    const animEndDelay = parseInt(step0Overlay.dataset.animEnd || "3200");
+
+    function showStep0Overlay() {
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-      document.getElementById("hintR")?.remove();
-      const el = document.createElement("div");
-      el.id = "hintR";
-      el.className = "fixed right-0 top-1/2 -translate-y-1/2 w-3 h-24 pointer-events-none z-20";
-      el.style.background = "linear-gradient(to left, rgba(200,169,110,0.5), transparent)";
-      el.style.borderRadius = "0 4px 4px 0";
-      el.style.opacity = "0";
-      reader.appendChild(el);
-      const breathe = (to: number, ms: number) => new Promise((r) => {
-        el.style.transition = `opacity ${ms}ms ease-in-out`;
-        el.style.opacity = String(to);
-        setTimeout(r, ms);
-      });
-      setTimeout(async () => {
-        await breathe(0.35, 600);
-        for (let i = 0; i < 3; i++) { await breathe(0.08, 900); await breathe(0.35, 900); }
-        await breathe(0, 400);
-        el.remove();
-      }, 800);
+      updateStep0Overlay(reader.dataset.language || "en");
+      overlayTimer = setTimeout(() => {
+        if (current !== 0) return;
+        step0Overlay.classList.remove("opacity-0");
+        stepContent.setAttribute("data-step0-animated", "");
+        zonePrev.tabIndex = -1;
+        zoneNext.tabIndex = -1;
+      }, animEndDelay);
     }
 
-    if (current === 0) showHint();
+    function hideStep0Overlay() {
+      clearTimeout(overlayTimer);
+      step0Overlay.remove();
+      zonePrev.tabIndex = 0;
+      zoneNext.tabIndex = 0;
+    }
+
+    const overlayClose = document.getElementById("overlayClose")!;
+    step0Overlay.addEventListener("click", hideStep0Overlay);
+    overlayClose.addEventListener("click", (e) => {
+      e.stopPropagation();
+      hideStep0Overlay();
+    });
+
+    if (current === 0) showStep0Overlay();
   </script>
 </BaseLayout>
