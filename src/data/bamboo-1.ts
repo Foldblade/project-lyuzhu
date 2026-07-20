@@ -315,7 +315,7 @@ export const bamboo1: BambooData = {
       {
         glyphIds: ["g31", "g32", "g33"],
         lemma: "享倗友 (xiǎng péng yǒu)",
-        body: '<em>"To dedicate and share with companions of the community"</em><br>The verb <em>xiǎng</em> (享) is employed in its foundational ritual sense. In early scripts, the graph depicts a sacrificial pavilion, originally signifying the presentation of ritual offerings, which later expanded to encapsulate communal reciprocity — specifically the act of hosting or sharing the utility with peers. The object <em>péng-yǒu</em> (倗友 / 朋友) denotes the interconnected nodes and companions of the community.',
+        body: '<em>"To dedicate and share with companions"</em><br>The verb <em>xiǎng</em> (享) is employed in its foundational ritual sense. In early scripts, the graph depicts a sacrificial pavilion, originally denoting the presentation of ritual offerings to ancestors and deities. By semantic extension, it came to encapsulate the ethics of communal reciprocity — specifically the acts of hosting, offering, and shared enjoyment among peers. The object <em>péng-yǒu</em> (倗友 / 朋友) designates one’s bound companions and the deep fellowship of peers.',
       },
       {
         glyphIds: ["g36", "g37"],
