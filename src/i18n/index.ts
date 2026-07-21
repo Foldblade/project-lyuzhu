@@ -30,7 +30,7 @@ i18n.init({
         ],
         afterword: {
           title: "跋 / Afterword",
-          body: "This inscription emulates the stylistic formula and orthography found on ritual bronze vessels from the mid-Western Zhou dynasty.<br><br>Jīnwén (金文, Bronze Inscriptions) refers to the characters cast and inscribed upon bells and cauldrons, spanning three millennia. Believing that metal and stone endure, the ancients entrusted their achievements and covenants to these sacred vessels, seeking to preserve their words forever between heaven and earth.<br><br>As I'm leaving Sydney, deeply moved by the inclusive spirit of this land and bound to the profound fellowship of my peers, I crafted this bamboo as an offering to the community. May the connections forged through rope defy the barriers of mountains and seas, and shine as one with the sun and moon.",
+          body: "This inscription emulates the stylistic formula and orthography found on ritual bronze vessels from the mid-Western Zhou dynasty.<br><br>Jīnwén (金文, Bronze Inscriptions) refers to the characters cast and inscribed upon bells and cauldrons, spanning three millennia. Believing that metal and stone endure, the ancients entrusted their achievements and covenants to these sacred vessels, seeking to preserve their words forever between heaven and earth.<br><br>As I'm leaving Sydney, deeply moved by the inclusive spirit of this land and bound to the profound fellowship of my peers, I crafted this bamboo as an offering to the community. May the connections through Shibari defy the barriers of mountains and seas, and shine as one with the sun and moon.",
         },
         socialInfo: {
           title: "About",

@@ -119,7 +119,7 @@ export const bamboo1: BambooData = {
           "在丙午年四月新月漸盈的丁酉日（西元二〇二六年五月二十三日），徐氏獲得了這（根竹材）。",
         zhHans:
           "在丙午年四月新月渐盈的丁酉日（2026 年 5 月 23 日），徐氏获得了这（根竹材）。",
-        en: "During the waxing crescent of the fourth lunar month in the Bǐngwǔ year, on the Dīngyǒu day (23 May 2026), the individual surnamed Xu acquired this (piece of bamboo).",
+        en: "During the waxing first-quarter moon of the fourth lunar month in the Bǐngwǔ year, on the Dīngyǒu day (23 May 2026), the individual surnamed Xu acquired this (piece of bamboo).",
       },
     },
     {
@@ -133,7 +133,7 @@ export const bamboo1: BambooData = {
           "將其製作為便於攜行與共用的「旅竹」；用它來承托與穿繫繩索，以此來約束身體、撫綏心靈。",
         zhHans:
           "将其制作为便于携行与共用的「旅竹」；用它来承托与穿系绳索，以此来约束身体、安定心灵。",
-        en: 'Made into a "travelling bamboo" for convenient shared use; it holds and threads the silk (rope), to bind the body and soothe the heart.',
+        en: "Made into a <em>lǚzhú</em> [travelling bamboo] for shared use; it anchors the silk cord to bind the body and soothe the mind-heart.",
       },
     },
     {
@@ -162,7 +162,7 @@ export const bamboo1: BambooData = {
       {
         glyphIds: ["g6", "g7", "g8"],
         lemma: "既生霸",
-        body: "西周纪月术语。霸，通“魄”，指月光。既生霸指新月始生光辉的吉日，约为农历月初上弦前后（西元 2026 年 5 月 23 日正值农历四月初七上弦月）。",
+        body: "西周金文月相术语。“霸”通“魄”，本指月体未发光之暗部。“生霸（魄）”谓暗部始生光辉；“既生霸”则指月光已然显著生光之阶段。古人“见月记相”，上弦前后（初七、初八）月体明暗各半，即入“既生霸”之观象。本铭（公元 2026 年 5 月 23 日，即农历四月初七）正值这一阶段。",
       },
       {
         glyphIds: ["g13"],
@@ -237,7 +237,7 @@ export const bamboo1: BambooData = {
       {
         glyphIds: ["g6", "g7", "g8"],
         lemma: "既生霸",
-        body: "西周紀月之術語。「霸」同「魄」，指月之光輝。「既生霸」意謂新月伊始，光華漸盈之吉日，約當夏曆每月月初上弦前後。",
+        body: "西周金文月相術語。「霸」通「魄」，本指月體未發光之暗部。「生霸（魄）」謂暗部始生光輝；「既生霸」則指月光已然顯著生光之階段。古人「見月記相」，上弦前後（初七、初八）月體明暗各半，即入「既生霸」之觀象。本銘（西元二〇二六年五月二十三日，即農曆四月初七）正值這一階段。",
       },
       {
         glyphIds: ["g13", "g14"],
@@ -285,7 +285,7 @@ export const bamboo1: BambooData = {
       {
         glyphIds: ["g6", "g7", "g8"],
         lemma: "丙午四月既生霸丁酉 (Bǐngwǔ sìyuè Jìshēngbà Dīngyǒu)",
-        body: '<em>"In the fourth lunar month of the Bǐngwǔ year, during the Jìshēngbà phase, on the Dīngyǒu day."</em><br>A chronological formula synthesizing the Sexagenary Cycle (<em>gānzhī</em> 干支) with archaic lunar phase terminology. While authentic Western Zhou epigraphy typically anchors chronology around a ruler\'s regnal year, this text adopts the rotating stem-branch matrix to record the specific year (<em>Bǐngwǔ</em>) and day (<em>Dīngyǒu</em>), overlaying the Western Zhou lunar marker <em>Jìshēngbà</em>.<br>Phonologically, <em>bà</em> (霸) serves as a loan for <em>pò</em> (魄), denoting the reflective light of the moon. Under the mainstream four-quarter chronological framework, <em>Jìshēngbà</em> ("after the birth of the lunar light") designates the first quarter phase, spanning roughly from the seventh or eighth to the fourteenth or fifteenth day of the lunar month—aligning with the modern Gregorian date of this inscription (23 May 2026), which corresponds to the seventh day of the fourth lunar month, the night of the waxing first-quarter moon.',
+        body: '<em>"In the fourth lunar month of the Bǐngwǔ year, during the Jìshēngbà phase, on the Dīngyǒu day."</em><br>A chronological formula synthesizing the Sexagenary Cycle (<em>gānzhī</em> 干支) with archaic lunar phase terminology. While authentic Western Zhou epigraphy typically anchors chronology around a ruler\'s regnal year, this text adopts the rotating stem-branch matrix to record the specific year (<em>Bǐngwǔ</em>) and day (<em>Dīngyǒu</em>), overlaying the Western Zhou lunar marker <em>Jìshēngbà</em>.<br>Phonologically, <em>bà</em> (霸) serves as a loan for <em>pò</em> (魄), which traditionally denotes the unlit body or dark phase of the moon. The compound <em>shēngbà[pò]</em > (生霸[魄], "birth of the dark-body\'s light") refers to the emergence of light upon this unlit disk, while <em>Jìshēngbà</em> signifies the stage where the moon\'s light has already become prominent. In antiquity, chronometry was governed by direct observational astronomy ("recording date by observation"). Around the First Quarter (the 7th or 8th day of the lunar month), as the moon reaches the half-disk boundary, it naturally enters the visual observation phase of <em>Jìshēngbà</em>. The modern Gregorian date of this inscription (23 May 2026), corresponding to the 7th day of the fourth lunar month, aligns squarely within this phase.',
       },
       {
         glyphIds: ["g15"],
@@ -320,17 +320,17 @@ export const bamboo1: BambooData = {
       {
         glyphIds: ["g36", "g37"],
         lemma: "康樂 (kāng lè)",
-        body: '<em>"Vibrant health, peace, and harmonious joy"</em><br>A classic benedictory compound frequent in late Western Zhou epigraphy. The character <em>kāng</em> (康) exhibits an early graph depicting grains separating from a winnowing basket, semantically expanding from agricultural abundance to denote physical well-being and tranquility. The character <em>lè</em> (樂, read as <em>yuè</em> in its musical origin) in its origin depicts silk strings stretched over a wooden frame — a musical instrument — signifying social harmony and shared celebration.<br>Conjoined, <em>kāng-lè</em> operates as a liturgical blessing invoking both individual physical vitality and the harmonious alignment of the collective.',
+        body: '<em>"Vibrant health, peace, and harmonious joy"</em><br>A benedictory compound synthesized from classic motifs in Western Zhou epigraphy. The character <em>kāng</em> (康) exhibits an early graph depicting grains separating from a winnowing basket, semantically expanding from agricultural abundance to denote physical well-being and tranquility. The character <em>lè</em> (樂, read as <em>yuè</em> in its musical origin) in its origin depicts silk strings stretched over a wooden frame — a musical instrument — signifying social harmony and shared celebration.<br>Conjoined, <em>kāng-lè</em> operates as a liturgical blessing invoking both individual physical vitality and the harmonious alignment of the collective.',
       },
       {
         glyphIds: ["g38", "g39"],
         lemma: "屯右 (tún yòu)",
-        body: 'read as <em>chún yòu</em> (純佑)<em> "Grand and unblemished protection."</em><br>A classic benedictory formula standard in Western Zhou epigraphy. The character <em>tún</em> (屯, a pictograph of a germinating sprout) serves as a phonetic loan for <em>chún</em> (純), signifying "grand and unblemished." The character <em>yòu</em> (右, a pictograph of a right hand) functions as the classic loan for <em>yòu</em> (佑/祐), embodying the spatial and ritual concept of guardianship positioned at one\'s right side.<br>Conjoined, the compound operates as a liturgical invocation, requesting an enduring, untainted aura of protection for the community.',
+        body: 'read as <em>chún yòu</em> (純佑)<em> "Grand and unblemished protection."</em><br>A classic benedictory formula standard in Western Zhou epigraphy. The character <em>tún</em> (屯, a pictograph of a germinating sprout) serves as a phonetic loan for <em>chún</em> (純), signifying "grand and unblemished." The character <em>yòu</em> (右, a pictograph of a right hand) functions as the classic loan for <em>yòu</em> (佑/祐), embodying the spatial and ritual concept of guardianship positioned at one\'s right side.<br>Conjoined, the compound operates as a liturgical invocation, requesting an enduring, untainted aura of protection for the companions.',
       },
       {
         glyphIds: ["g41", "g42", "g43", "g44"],
         lemma: "萬秂永用 (wàn nián yǒng yòng)",
-        body: '"May it be eternally treasured and utilized for ten thousand years."<br>The closing phrase traditionally carved into ancient bronzes. Here, wàn-nián (万年, literally "ten thousand years") functions as a figurative term invoking absolute eternity. In the original text, the word for "year" is written in its archaic paleographic form, 秂, which combines 禾 (ripe grain) atop 人 (a person)—vividly depicting a human being carrying a bountiful harvest on their back, a meaning that later expanded to denote the annual cycle of seasons. Paleographically, the character yǒng (永) similarly evolved from depicting the long, continuous flow of a stream to mean "forever" or "eternity."<br>Combined, it represents a deep desire for this object to be cared for and thoroughly used across that endless span of time. The inscription flows into its final yòng (用, to use), because the life of this bamboo isn\'t found in keeping it untouched on a shelf, but in the continuous act of touching it, tying it, and keeping it alive within the shared social space.',
+        body: '"May it be eternally treasured and utilized for ten thousand years."<br>The closing phrase traditionally carved into ancient bronzes. Here, wàn-nián (萬年 / 万年, literally "ten thousand years") functions as a figurative term invoking absolute eternity. In the original text, the word for "year" is written in its archaic paleographic form, 秂, which combines 禾 (ripe grain) atop 人 (a person)—vividly depicting a human being carrying a bountiful harvest on their back, a meaning that later expanded to denote the annual cycle of seasons. Paleographically, the character yǒng (永) similarly evolved from depicting the long, continuous flow of a stream to mean "forever" or "eternity."<br>Combined, it represents a deep desire for this object to be cared for and thoroughly used across that endless span of time. The inscription flows into its final yòng (用, to use), because the life of this bamboo isn\'t found in keeping it untouched on a shelf, but in the continuous act of touching it, tying it, and keeping it alive within the shared social space.',
       },
     ],
   },
