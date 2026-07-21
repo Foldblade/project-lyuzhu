@@ -44,6 +44,9 @@ const totalAnimMs = Math.ceil((lastRowStart + ANIM_DURATION) * 1000) + 300;
 ---
 
 <BaseLayout title={data.name.zhHant}>
+  <Fragment slot="head">
+    <meta name="robots" content="noindex" />
+  </Fragment>
   <h1 class="sr-only">{data.name.zhHant}</h1>
   <div id="reader" class="flex flex-col h-dvh bg-dark-bg overflow-hidden relative" transition:name="reader" data-language="en">
     <div class="flex-1 relative w-full overflow-hidden" id="stepContent" aria-live="polite">

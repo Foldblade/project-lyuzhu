@@ -35,6 +35,7 @@ i18n.init({
         socialInfo: {
           title: "About",
           body: "Welcome to share your story with this bamboo in the Fetlife comment section.",
+          instagram: "Keep in touch with me on Instagram",
           footer: "Made by Tim with ❤️",
         },
         step0Hint: {
@@ -62,6 +63,7 @@ i18n.init({
         socialInfo: {
           title: "關於",
           body: "歡迎前往 Fetlife 評論區留下你與這根「旅竹」的故事",
+          instagram: "在 Instagram 上與我保持聯繫",
           footer: "Made by Tim with ❤️",
         },
         step0Hint: {
@@ -87,7 +89,8 @@ i18n.init({
         },
         socialInfo: {
           title: "关于",
-          body: "欢迎前往 Fetlife 评论区留下你与这根「旅竹」的故事",
+          body: "欢迎前往 Fetlife 评论区留下你与这根\u201c旅竹\u201d的故事",
+          instagram: "在 Instagram 上与我保持联系",
           footer: "Made by Tim with ❤️",
         },
         step0Hint: {
